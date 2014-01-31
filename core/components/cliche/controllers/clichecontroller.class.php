@@ -17,7 +17,7 @@ abstract class ClichePlugin {
         $this->controller =& $controller;
         $this->modx =& $controller->modx;
     }
-    
+
      /**
      * Set an option for this module
      * @param string $key
@@ -70,8 +70,8 @@ abstract class ClicheController {
     /** @var array $scriptProperties */
     protected $scriptProperties = array();
 
-    protected $placeholders = array();  
-    
+    protected $placeholders = array();
+
     abstract public function initialize();
     abstract public function process();
 
@@ -92,7 +92,7 @@ abstract class ClicheController {
      */
     public function run($scriptProperties) {
         $this->setProperties($scriptProperties);
-        $this->loadPlugin();   
+        $this->loadPlugin();
         $this->initialize();
         /* chunks_path is not overridable by script properties - better for multi instance call */
         $chunksPath = isset( $this->config['chunks_path'] ) ? $this->config['chunks_path'] :  null;
@@ -109,12 +109,13 @@ abstract class ClicheController {
     public function loadPlugin(){
         $plugin = $this->getProperty('plugin');
         if(!empty($plugin)){
-            if (!$this->modx->loadClass("{$plugin}.{$plugin}", $this->config['plugins_path'],true,true)) {
-                $this->modx->log(modX::LOG_LEVEL_ERROR, '[Cliche] Could not load '.$plugin.' plugin in: '. $this->config['plugins_path'] . $plugin .'/'. $plugin .'.class.php');
+            $pluginFile = strtolower($plugin);
+            if (!$this->modx->loadClass("{$pluginFile}.{$pluginFile}", $this->config['plugins_path'],true,true)) {
+                $this->modx->log(modX::LOG_LEVEL_ERROR, '[Cliche] Could not load '.$plugin.' plugin in: '. $this->config['plugins_path'] . $pluginFile .'/'. $pluginFile .'.class.php');
             }
-            $className = empty($plugin) || $plugin == 'default' ? 'DefaultPlugin' : ucfirst($plugin);
-            $this->plugin = new $className($this);
         }
+        $className = empty($plugin) || $plugin == 'default' ? 'DefaultPlugin' : ucfirst($plugin);
+        $this->plugin = new $className($this);
     }
 
     /**
@@ -123,7 +124,7 @@ abstract class ClicheController {
      * @param mixed $args Optional arguments to pass to the plugin class
      * @return mixed/void if $args is not supplied else the processed $args
      */
-    public function fireEvent($event, $args = null){    
+    public function fireEvent($event, $args = null){
         if(isset($this->plugin) && is_object($this->plugin)){
             if(is_callable(array($this->plugin, $event))){
                 if($args == null){
@@ -132,8 +133,8 @@ abstract class ClicheController {
                 } else {
                     return call_user_func_array( array($this->plugin, $event), $args );
                 }
-            }            
-        }    
+            }
+        }
         return false;
     }
 
@@ -143,7 +144,7 @@ abstract class ClicheController {
      */
     public function loadCSS($name) {
         $this->modx->regClientCSS($this->config['plugin_assets_url'] . $name .'.css');
-    }    
+    }
 
     /**
      * Set the default options for this module
@@ -243,7 +244,7 @@ abstract class ClicheController {
         }
         return $output;
     }
-    
+
     /**
      * Convert string params to path for use in file based chunks
      *
@@ -257,14 +258,14 @@ abstract class ClicheController {
             $this->modx->getOption('base_path'),
             $this->modx->getOption('assets_path'),
         ), $this->config);
-        
-        $config['chunks_path'] = $config['plugins_path'] . $this->getProperty('plugin') . '/';
-        $config['plugin_assets_url'] = $config['plugins_url'] . $this->getProperty('plugin') . '/';
-        
-        $this->config = array_merge($this->config, $config);    
-        $this->cliche->config = $this->config;    
-    }    
-    
+
+        $config['chunks_path'] = $config['plugins_path'] . strtolower($this->getProperty('plugin')) . '/';
+        $config['plugin_assets_url'] = $config['plugins_url'] . strtolower($this->getProperty('plugin')) . '/';
+
+        $this->config = array_merge($this->config, $config);
+        $this->cliche->config = $this->config;
+    }
+
     /**
      * Processes the content of a chunk in either of the following ways:
      *
@@ -286,10 +287,10 @@ abstract class ClicheController {
             if (!$useFileBasedChunks) {
                 $chunk = $this->modx->getObject('modChunk',array('name' => $name));
             }
-            if (empty($chunk)) {    
+            if (empty($chunk)) {
                 $chunk = $this->_getTplChunk($name);
                 if(!is_object($chunk)) return $chunk;
-            }                
+            }
             $this->chunks[$name] = $chunk->getContent();
         } else { /* load chunk from cache */
             $o = $this->chunks[$name];
@@ -299,7 +300,7 @@ abstract class ClicheController {
         $chunk->setCacheable(false);
         return $chunk->process($properties);
     }
-    
+
     /**
      * Returns a modChunk object from a template file.
      *
