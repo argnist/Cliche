@@ -160,3 +160,10 @@ $_lang['cliche.no_desc'] = '<em>Bez popisu</em>';
 $_lang['cliche.no_preview'] = 'Bez náhledu';
 // $_lang['cliche.saving_msg'] = 'Saving, please Wait...';
 $_lang['cliche.saving_msg'] = 'Ukládání, momentíček...';
+// $_lang['cliche.save_new_order'] = 'Save new order';
+$_lang['cliche.save_new_order'] = 'Uložit nové pořadí';
+
+
+/* AlbumSelect TV */
+// $_lang['cliche.album_management'] = 'Manage album';
+$_lang['cliche.album_management'] = 'Spravovat album';
