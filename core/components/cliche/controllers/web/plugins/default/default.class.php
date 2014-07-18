@@ -133,7 +133,7 @@ class DefaultPlugin extends ClichePlugin {
     public function setItemPlaceholder($phs, $obj){
         /* We use the internal phpThumb class to set the custom thumbnail */
         $fileName = str_replace(' ', '_', $obj->get('name'));
-        $mask = $fileName .'-'. $phs['width'] .'x'. $phs['height'] .'-zc.png';
+        $mask = $fileName .'-'. $phs['width'] .'x'. $phs['height'] .'-zc.jpg';
         $file = $obj->getCacheDir() . $mask;
         if(!file_exists($file)){
             $original = $this->controller->config['images_path'] . $obj->get('filename');
@@ -142,7 +142,7 @@ class DefaultPlugin extends ClichePlugin {
                 'jpegQuality' => 90,
              ));
             $thumb->adaptiveResize($phs['width'], $phs['height']);
-            $thumb->save($file, 'png');
+            $thumb->save($file, 'jpg');
         }
         $phs['thumbnail'] = $obj->getCacheDir(false) . $mask;
         
