@@ -166,15 +166,15 @@ class DefaultPlugin extends ClichePlugin {
             $this->view == 'album' && $this->useFancyBox && $this->zoomAlbumItem ){
             
             $loadJquery = $this->getProperty('loadJquery', true);
-			$loadFancyBox = $this->getProperty('loadFancyBox', true);
+            $loadFancyBox = $this->getProperty('loadFancyBox', true);
             if($loadJquery){
                 $this->modx->regClientStartupScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js');
             }
-			if($loadFancyBox) {
-				$this->modx->regClientStartupScript($this->controller->config['plugin_assets_url'] . 'fancybox/jquery.fancybox-1.3.4.pack.js');
-				$script = $this->getProperty('js', 'script');
-				$this->modx->regClientHTMLBlock('<script type="text/javascript">'. $this->controller->getChunk($script) .'</script>');
-			}
+            if($loadFancyBox) {
+                $this->modx->regClientStartupScript($this->controller->config['plugin_assets_url'] . 'fancybox/jquery.fancybox-1.3.4.pack.js');
+                $script = $this->getProperty('js', 'script');
+                $this->modx->regClientHTMLBlock('<script type="text/javascript">'. $this->controller->getChunk($script) .'</script>');
+            }
             
             
         }
